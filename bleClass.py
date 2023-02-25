@@ -38,7 +38,7 @@ class BLE:
     
     def connectToDevice(self, device) -> None:
         self.target_device = device
-        print(self.target_device)
+        print("Selected Device : ", self.target_device)
         asyncio.run(self.setConnection())
     
     def pushQueue(self, data) -> None:
