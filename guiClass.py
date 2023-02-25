@@ -31,7 +31,6 @@ class Ui(QtWidgets.QMainWindow):
         self.btnRefresh.clicked.connect(self.refresh)
         self.btnConnect.clicked.connect(self.connect)
         self.btnDisconnect.clicked.connect(self.disconnect)
-        self.createThread(target_func = self.controlThread)
         self.createThread(target_func = self.checkConnection)
         self.show()
 
@@ -67,9 +66,9 @@ class Ui(QtWidgets.QMainWindow):
         
     def controlThread(self) -> None:
         while True:
+            if not self.ble.isConnected():
+                break
             if self.BLEOut is not None and self.BLEOut != self.BLEOut_old:
-                if self.BLEOut == "q":
-                    break
                 self.ble.pushQueue(self.BLEOut)
                 self.BLEOut_old = self.BLEOut
             sleep(0.01)                        
@@ -117,7 +116,9 @@ class Ui(QtWidgets.QMainWindow):
 
     def setComboBox(self) -> None:
         self.cmbBles.clear()
-        for device in self.devices:
+        self.devices = self.ble.getDeviceList()
+        for ith, device in enumerate(self.devices):
+            print(f"Device {ith + 1} : {device.name}")
             self.cmbBles.addItem(device.name) 
 
     def refresh(self) -> None:
@@ -126,8 +127,7 @@ class Ui(QtWidgets.QMainWindow):
 
         while not self.ble.isScanDone():
             QtWidgets.QApplication.processEvents()
-
-        self.devices = self.ble.getDeviceList()
+        
         self.setComboBox()
         self.btnRefresh.setEnabled(True)
         
@@ -137,7 +137,10 @@ class Ui(QtWidgets.QMainWindow):
             if device.name == target_device_name:
                 self.target_device = device
         self.createThread(target_func = self.ble.connectToDevice, args = self.target_device)
+        sleep(2)
+        self.createThread(target_func = self.controlThread)
+        
 
     def disconnect(self) -> None:
-        self.BLEOut = "q"
-        self.ble.pushQueue("q")
+        self.ble.disconnectFromDevice()
+        #self.createThread(target_func = self.ble.disconnectFromDevice)
