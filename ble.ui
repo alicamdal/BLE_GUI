@@ -6,12 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>512</width>
-    <height>512</height>
+    <width>511</width>
+    <height>559</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>BLE Communication GUI</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QGroupBox" name="groupBox">
@@ -102,87 +102,100 @@
      </property>
     </widget>
    </widget>
-   <widget class="QLabel" name="img_up">
+   <widget class="QGroupBox" name="groupBox_2">
     <property name="geometry">
      <rect>
-      <x>200</x>
-      <y>160</y>
-      <width>80</width>
-      <height>80</height>
+      <x>10</x>
+      <y>170</y>
+      <width>481</width>
+      <height>291</height>
      </rect>
     </property>
-    <property name="text">
-     <string/>
+    <property name="title">
+     <string>Direction Indicator</string>
     </property>
-    <property name="pixmap">
-     <pixmap>assets/triangle_gray_up.png</pixmap>
-    </property>
-   </widget>
-   <widget class="QLabel" name="img_right">
-    <property name="enabled">
-     <bool>true</bool>
-    </property>
-    <property name="geometry">
-     <rect>
-      <x>280</x>
-      <y>240</y>
-      <width>80</width>
-      <height>80</height>
-     </rect>
-    </property>
-    <property name="layoutDirection">
-     <enum>Qt::LeftToRight</enum>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-    <property name="pixmap">
-     <pixmap>assets/triangle_gray_right.png</pixmap>
-    </property>
-   </widget>
-   <widget class="QLabel" name="img_down">
-    <property name="enabled">
-     <bool>true</bool>
-    </property>
-    <property name="geometry">
-     <rect>
-      <x>200</x>
-      <y>320</y>
-      <width>80</width>
-      <height>80</height>
-     </rect>
-    </property>
-    <property name="layoutDirection">
-     <enum>Qt::LeftToRight</enum>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-    <property name="pixmap">
-     <pixmap>assets/triangle_gray_down.png</pixmap>
-    </property>
-   </widget>
-   <widget class="QLabel" name="img_left">
-    <property name="enabled">
-     <bool>true</bool>
-    </property>
-    <property name="geometry">
-     <rect>
-      <x>120</x>
-      <y>240</y>
-      <width>80</width>
-      <height>80</height>
-     </rect>
-    </property>
-    <property name="layoutDirection">
-     <enum>Qt::LeftToRight</enum>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-    <property name="pixmap">
-     <pixmap>assets/triangle_gray_left.png</pixmap>
-    </property>
+    <widget class="QLabel" name="img_left">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>110</x>
+       <y>120</y>
+       <width>80</width>
+       <height>80</height>
+      </rect>
+     </property>
+     <property name="layoutDirection">
+      <enum>Qt::LeftToRight</enum>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="pixmap">
+      <pixmap>assets/triangle_gray_left.png</pixmap>
+     </property>
+    </widget>
+    <widget class="QLabel" name="img_right">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>270</x>
+       <y>120</y>
+       <width>80</width>
+       <height>80</height>
+      </rect>
+     </property>
+     <property name="layoutDirection">
+      <enum>Qt::LeftToRight</enum>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="pixmap">
+      <pixmap>assets/triangle_gray_right.png</pixmap>
+     </property>
+    </widget>
+    <widget class="QLabel" name="img_up">
+     <property name="geometry">
+      <rect>
+       <x>190</x>
+       <y>40</y>
+       <width>80</width>
+       <height>80</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="pixmap">
+      <pixmap>assets/triangle_gray_up.png</pixmap>
+     </property>
+    </widget>
+    <widget class="QLabel" name="img_down">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>190</x>
+       <y>200</y>
+       <width>80</width>
+       <height>80</height>
+      </rect>
+     </property>
+     <property name="layoutDirection">
+      <enum>Qt::LeftToRight</enum>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="pixmap">
+      <pixmap>assets/triangle_gray_down.png</pixmap>
+     </property>
+    </widget>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -190,7 +203,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>512</width>
+     <width>511</width>
      <height>24</height>
     </rect>
    </property>
