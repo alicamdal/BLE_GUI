@@ -10,12 +10,14 @@ class Ui(QtWidgets.QMainWindow):
     def __init__(self):
         super(Ui, self).__init__()
         uic.loadUi('ble.ui', self)
+
         self.ble = BLE()
         self.devices = None
         self.target_device = None
-        self.close_flag = False
+        self.close_check = False
         self.BLEOut = None
         self.BLEOut_old = None
+
         self.pixMaps = {
             "gray_up"     : QPixmap("assets/triangle_gray_up.png"),
             "green_up"    : QPixmap("assets/triangle_green_up.png"),
@@ -26,27 +28,33 @@ class Ui(QtWidgets.QMainWindow):
             "gray_left"   : QPixmap("assets/triangle_gray_left.png"),
             "green_left"  : QPixmap("assets/triangle_green_left.png")
         }
-        self.lblConStats.setText("Disconnected")
-        self.lblConStats.setStyleSheet("background-color: red")
+
+        self.updateConnStatus(False)
         self.btnRefresh.clicked.connect(self.refresh)
         self.btnConnect.clicked.connect(self.connect)
         self.btnDisconnect.clicked.connect(self.disconnect)
         self.createThread(target_func = self.checkConnection)
         self.show()
 
+    def updateConnStatus(self, status) -> None:
+        if status:
+            self.lblConStats.setText("Connected")
+            self.lblConStats.setStyleSheet("background-color: lightgreen")
+            self.lblConStats.adjustSize()
+        else:
+            self.lblConStats.setText("Disconnected")
+            self.lblConStats.setStyleSheet("background-color: red")
+            self.lblConStats.adjustSize()
+    
     def checkConnection(self) -> None:
         while True:
-            if self.close_flag:
+            if self.close_check:
                 break
             else:
                 if self.ble.isConnected():
-                    self.lblConStats.setText("Connected")
-                    self.lblConStats.setStyleSheet("background-color: lightgreen")
-                    self.lblConStats.adjustSize()
+                    self.updateConnStatus(True)
                 else:
-                    self.lblConStats.setText("Disconnected")
-                    self.lblConStats.setStyleSheet("background-color: red")
-                    self.lblConStats.adjustSize()
+                    self.updateConnStatus(False)
             sleep(0.1)
     
     def closeEvent(self, event):
@@ -60,7 +68,7 @@ class Ui(QtWidgets.QMainWindow):
             event.accept()
             # To kill two threads and disconnet from BLE.
             self.disconnect()
-            self.close_flag = True
+            self.close_check = True
         else:
             event.ignore()
         
@@ -109,11 +117,15 @@ class Ui(QtWidgets.QMainWindow):
             self.BLEOut = "r4"
         
     def createThread(self, **kwargs) -> None:
-        try:
+        keys = list(kwargs.keys())
+        
+        if "target_func" in keys and "args" in keys:
             Thread(target = kwargs["target_func"], args = (kwargs["args"], )).start()
-        except KeyError:
+        elif "target_func" in keys:
             Thread(target = kwargs["target_func"], args=()).start()
-
+        else:
+            print("Wrong arguments")
+        
     def setComboBox(self) -> None:
         self.cmbBles.clear()
         self.devices = self.ble.getDeviceList()
@@ -140,7 +152,5 @@ class Ui(QtWidgets.QMainWindow):
         sleep(2)
         self.createThread(target_func = self.controlThread)
         
-
     def disconnect(self) -> None:
         self.ble.disconnectFromDevice()
-        #self.createThread(target_func = self.ble.disconnectFromDevice)
