@@ -14,7 +14,6 @@ class Ui(QtWidgets.QMainWindow):
         self.ble = BLE()
         self.devices = None
         self.target_device = None
-        self.close_check = False
         self.BLEOut = None
         self.BLEOut_old = None
 
@@ -28,12 +27,11 @@ class Ui(QtWidgets.QMainWindow):
             "gray_left"   : QPixmap("assets/triangle_gray_left.png"),
             "green_left"  : QPixmap("assets/triangle_green_left.png")
         }
-
+        self.ble.setUpdateHandler(self.updateConnStatus)
         self.updateConnStatus(False)
         self.btnRefresh.clicked.connect(self.refresh)
         self.btnConnect.clicked.connect(self.connect)
         self.btnDisconnect.clicked.connect(self.disconnect)
-        self.createThread(target_func = self.checkConnection)
         self.show()
 
     def updateConnStatus(self, status) -> None:
@@ -46,17 +44,6 @@ class Ui(QtWidgets.QMainWindow):
             self.lblConStats.setStyleSheet("background-color: red")
             self.lblConStats.adjustSize()
     
-    def checkConnection(self) -> None:
-        while True:
-            if self.close_check:
-                break
-            else:
-                if self.ble.isConnected():
-                    self.updateConnStatus(True)
-                else:
-                    self.updateConnStatus(False)
-            sleep(0.1)
-    
     def closeEvent(self, event):
         reply = QtWidgets.QMessageBox.question(
                 self, 'Quit?',
@@ -68,7 +55,6 @@ class Ui(QtWidgets.QMainWindow):
             event.accept()
             # To kill two threads and disconnet from BLE.
             self.disconnect()
-            self.close_check = True
         else:
             event.ignore()
         

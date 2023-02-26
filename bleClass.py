@@ -11,17 +11,22 @@ class BLE:
         self.scan_done = False
         self.is_connected = False
         self.close_flag = False
+        self.updateStatus = None
         self.data_queue = Queue()
         self.UART_SERVICE_UUID = "6E400001-B5A3-F393-E0A9-E50E24DCCA9E"
         self.UART_RX_CHAR_UUID = "6E400002-B5A3-F393-E0A9-E50E24DCCA9E"
         self.UART_TX_CHAR_UUID = "6E400003-B5A3-F393-E0A9-E50E24DCCA9E" 
     
+    def setUpdateHandler(self, func) -> None:
+        self.updateStatus = func
+
     def handle_rx(self, _: BleakGATTCharacteristic, data: bytearray) -> None:
         print("received:", data)
 
     def handle_disconnect(self, _: BleakClient) -> None:
         print("Device disconnected.")
         self.is_connected = False
+        self.updateStatus(False)
     
     def isScanDone(self) -> bool:
         if self.scan_done:
@@ -71,6 +76,7 @@ class BLE:
             await self.client.start_notify(self.UART_TX_CHAR_UUID, self.handle_rx)
 
             self.is_connected = True
+            self.updateStatus(True)
             nus = self.client.services.get_service(self.UART_SERVICE_UUID)
             rx_char = nus.get_characteristic(self.UART_RX_CHAR_UUID)
             await self.communicationTask(rx_char = rx_char)
